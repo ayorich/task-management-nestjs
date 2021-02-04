@@ -1,2 +1,5 @@
 db:
   synchronizee: false
+
+server:
+  origin: http://www.yourdomain.com

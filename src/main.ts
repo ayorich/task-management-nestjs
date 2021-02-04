@@ -4,11 +4,18 @@ import { AppModule } from './app.module';
 import * as config from 'config';
 
 async function bootstrap() {
-  const serverConfig = config.get('server');
   const logger = new Logger('bootstrap');
-
   const app = await NestFactory.create(AppModule);
+  const serverConfig = config.get('server');
 
+  if (process.env.NODE_ENV === 'development') {
+    app.enableCors();
+  } else {
+    app.enableCors({
+      origin: serverConfig.origin,
+    });
+    logger.log(`Accepting request from origin:${serverConfig.origin}`);
+  }
   const port = process.env.port || serverConfig.port;
   await app.listen(port);
 
